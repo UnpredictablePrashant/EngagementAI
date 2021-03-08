@@ -1,12 +1,16 @@
-import numpy as np
 import cv2
+import numpy as np
+
 import filename
+
+
 def videoRecord():
     videoCap = cv2.VideoCapture(0)
     videoCod = cv2.VideoWriter_fourcc(*'DIVX')
     videoFileName = filename.namingFile()+".avi"
     print(videoFileName)
     output = cv2.VideoWriter("temp.avi", videoCod, 20.0, (640,480))
+
 
     while(True):
         # Capture each frame of webcam video
