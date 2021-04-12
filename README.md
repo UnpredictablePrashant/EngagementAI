@@ -17,5 +17,5 @@ python3 -m pip install opencv-python
 ## Contributors
 
 <a href="https://github.com/UnpredictablePrashant/EngagementAI/graphs/contributors">
-  <img src="https://github.com/UnpredictablePrashant/EngagementAI" />
+  <img src="https://github.com/UnpredictablePrashant/EngagementAI/" />
 </a>
