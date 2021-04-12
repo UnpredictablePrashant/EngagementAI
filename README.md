@@ -1,6 +1,6 @@
 # EngagementAI
 
-<center><img src="./out/result1.jpg" width="900" height="400"></center>
+<center><img src="./docs/Readmeimages/output.jpg" width="900" height="400"></center>
 
 ## Introduction
 This project uses AWS Rekognition for the emotion detection. Based on the emotion detected, further analysis is made.
@@ -34,7 +34,7 @@ python src/utils/Videos2Images.py -i C:/Users/imash/Documents/upwork/db/input/vi
 
 - inputpath : Input path of the Sample Video
 - fps : Frame per second
-- imageExt : File extension. This archetecture supports only *.jpg format
+- imageExt : File extension. This architecture supports only *.jpg format
 - OutputName : Alias of the output file name
 
 If you don't want to involve in complexity of input argument, then just insure that your video should be available at `./db/input/videos/SourceDump` and run below mentioned code. Script will dump your images at `./db/input/videos/OutputDump/frame*.jpg` with an alias of `frame`.
@@ -45,4 +45,7 @@ python src/utils/Videos2Images.py
 
 
 *As of now user are suppose to do the selection of images need to be analyzed.*
+
+## How to setup the person details?
+In this step user is suppose to mask the face from the images. **File name should be the Name of the person**.
 
