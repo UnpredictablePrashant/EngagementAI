@@ -14,8 +14,10 @@ import json
 import os
 import argparse
 
+path = os.path.abspath(os.path.join(os.path.dirname(__file__), "./..")).replace("\\","/")
+
 # Import credentials files
-credentials=json.load(open('../config/credentials.json','rb'))
+credentials=json.load(open(path + '/config/credentials.json','rb'))
 access_key_id = credentials["Access key ID"]
 secret_access_key = credentials["Secret access key"]
 
@@ -29,16 +31,17 @@ def reko(imagePath,savePath):
         source_bytes = source_image.read()
 
     # Use web services
+    print("[info...] Request for Emotion identification initiated")
     response_face_emotion = client.detect_faces(Image={'Bytes':source_bytes},Attributes=['ALL']) # This part can be modify if user need to access the images from S3
 
     _, tail = os.path.split(imagePath) # To get the file name from path
 
     # Save response
+    if not os.path.exists(savePath): os.makedirs(savePath)
     json.dump(response_face_emotion,open(savePath+tail.split(".")[0]+".json","w")) # Input file name and JSON file will be same
+    print("[info...] Emotions successfully dumped")
 
 if __name__=="__main__":
-
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__), "./..")).replace("\\","/")
 
     # Get user supplied values
     parser=argparse.ArgumentParser(description='AWS rekognition service utilization tool')

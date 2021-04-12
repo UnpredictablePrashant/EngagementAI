@@ -13,7 +13,7 @@ def FaceDetect(imagePath,savePath,cascPath):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Detect faces in the image
-    faces = faceCascade.detectMultiScale(gray,scaleFactor=1.1,minNeighbors=3,minSize=(30, 30))
+    faces = faceCascade.detectMultiScale(gray,scaleFactor=1.1,minNeighbors=2,minSize=(10, 10))
 
     print("[info...] Found {0} faces!".format(len(faces)))
 
@@ -29,8 +29,10 @@ if __name__=="__main__":
     cascPath = path + "/src/utils/models/haarcascade_frontalface_default.xml"
     # Get user supplied values
     parser=argparse.ArgumentParser(description='Face Detection Tool')
-    parser.add_argument("-i","--imagePath",type=str,default=path+'/db/input/images/sample3.jpg',help='Input image')
+    parser.add_argument("-i","--imagePath",type=str,default=path+'/db/input/images/frame33.jpg',help='Input image')
     parser.add_argument("-s","--savePath",type=str,default=path+'/db/output/',help='Image output path')
     args=parser.parse_args()
     
     FaceDetect(args.imagePath,args.savePath,cascPath)
+
+    
