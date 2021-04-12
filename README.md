@@ -1,16 +1,23 @@
 # EngagementAI
 
+<center><img src="./out/result1.jpg" width="900" height="400"></center>
+
+## Introduction
 This project uses AWS Rekognition for the emotion detection. Based on the emotion detected, further analysis is made.
 
-Install the dependencies from the requirements.txt
+## How to setup the environment for this project?
+1. Install Anaconda from this link https://www.anaconda.com/products/individual#windows and follow the steps mentioned in following link
+https://docs.anaconda.com/anaconda/install/windows/
 
-```
-pip3 install -r requirements.txt
-```
+2. After Anaconda installation, go to search and run Anaconda Prompt and create virtual environment using following commands.
 
-If you are getting opencv error then please install it manually using the command
+    `conda create -n engagementai python=3.7.3`
 
-```
-python3 -m pip install opencv-python
-```
+    `conda activate engagementai`
 
+3. Run Anaconda prompt and change the drive to the location to this directory and run command `python -m pip install -r requirements.txt`. This will install all the packages require for model execution.
+
+## Contribution
+<a href="https://github.com/UnpredictablePrashant/EngagementAI/graphs/contributors">
+  <img src="https://github.com/UnpredictablePrashant/EngagementAI/" />
+</a>
