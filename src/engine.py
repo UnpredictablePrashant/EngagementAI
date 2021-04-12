@@ -18,7 +18,6 @@ import numpy as np
 import cv2
 import json
 import random
-import matplotlib.pyplot as plt
 
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), "./..")).replace("\\","/")
 
@@ -29,7 +28,37 @@ secret_access_key = credentials["Secret access key"]
 
 # Activate web services
 client = boto3.client('rekognition', region_name='us-east-1', aws_access_key_id = access_key_id, aws_secret_access_key= secret_access_key)
+s3 = boto3.client('s3')
+s3 = boto3.resource(
+    service_name='s3',
+    region_name='us-east-1',
+    aws_access_key_id=access_key_id,
+    aws_secret_access_key=secret_access_key
+    )
 
+def create_bucket(name):
+    """ To create Amazon S3 bucket """
+    s3.create_bucket(Bucket=name)
+
+def upload_folder_to_s3(s3bucket, inputDir, s3Path):
+    """ To add the files with directory in S3 """
+    print("Uploading results to s3 initiated...")
+    print("Local Source:",inputDir)
+    os.system("ls -ltR " + inputDir)
+    print("Dest  S3path:",s3Path)
+    try:
+        for path, subdirs, files in os.walk(inputDir):
+            for file in files:
+                dest_path = path.replace(inputDir,"")
+                __s3file = os.path.normpath('/' + dest_path + '/' + file).replace("\\","/")
+                __local_file = os.path.join(path, file)
+                print("upload : ", __local_file, " to Target: ", __s3file, end="")
+                s3bucket.upload_file(__local_file, s3Path +__s3file)
+                print(" ...Success")
+    except Exception as e:
+        print(" ... Failed!! Quitting Upload!!")
+        print(e)
+        raise e     
 
 def reko(imagePath,savePath):
     """ To do Emotional analysis of the images stored in respective folder """
