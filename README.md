@@ -70,9 +70,14 @@ Steps
 - outputjson_emotion : Amazon Rekognition Emotional analysis file of image selected in step 1. e.g. `./out/frame33.json`
 
 ## Upload the images in S3
-
---TODO--
-
+```python
+from src.engine import upload_folder_to_s3
+Bucket_name="xxxx"
+Directory_name='C:/Users/imash/Documents/upwork/db/artifact/'
+Folder_in_S3='artifact'
+s3bucket = s3.Bucket(Bucket_name)
+upload_folder_to_s3(s3bucket, Directory_name, Folder_in_S3)  
+```
 ## Analysis
 
 
@@ -87,9 +92,3 @@ reset()
 
 ## References
 [Input Data used for analysis](https://www.youtube.com/watch?v=K4GyPYuiLWQ&t=15s&ab_channel=PatrickEagan)
-
-
-
-
-
-
