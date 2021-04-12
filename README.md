@@ -1,6 +1,6 @@
 # EngagementAI
 
-<center><img src="./docs/Readmeimages/output.jpg" width="900" height="400"></center>
+<center><img src="./db/input/images/output.jpg" width="900" height="400"></center>
 
 ## Introduction
 This project uses AWS Rekognition for the emotion detection. Based on the emotion detected, further analysis is made.
@@ -59,10 +59,12 @@ In this step user is suppose to mask the face from the images. **File name shoul
 Steps 
 - Select the image from [./db/input/videos/OutputDump/frame*.jpg](./db/input/videos/OutputDump/) which contains all the persons with proper visibility of face. From this particular image we will extract the face.
 - Run below command
-```python
-from src.engine import facedetect
-facedetect(photo,outputjson_emotion)
-```
+    ```python
+    from src.engine import facedetect
+    facedetect(photo,outputjson_emotion)
+    ```
+- Modify *.csv for [Marks](./db/input/docs/Marks.csv) and [QnA](./db/input/docs/QnA.csv).
+
 **Explaination**
 - photo : Location of image selected in Step 1. e.g. `./db/input/images/frame33.jpg`
 - outputjson_emotion : Amazon Rekognition Emotional analysis file of image selected in step 1. e.g. `./out/frame33.json`
@@ -70,6 +72,9 @@ facedetect(photo,outputjson_emotion)
 ## Upload the images in S3
 
 --TODO--
+
+## Analysis
+
 
 
 ## Reset the software

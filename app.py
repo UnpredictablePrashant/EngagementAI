@@ -6,7 +6,7 @@ import os
 # Get all the files in directory
 rootpath = os.path.abspath(os.path.join(os.path.dirname(__file__), "./")).replace("\\", "/")
 directory = rootpath+ "/db/input/videos/OutputDump/*.jpg"
-outputpath = rootpath+'/out/'
+outputpath = rootpath+"/out/"
 
 files = glob.glob(directory)
 
@@ -20,3 +20,5 @@ for i,file in enumerate(files):
     reko(file,savePath)
 
     print(f"[info...] {tail} processed")
+
+

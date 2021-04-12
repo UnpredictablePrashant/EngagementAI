@@ -4,15 +4,21 @@
          `.(    `.(    `.(    `.(    `.(    `.(    `.(    `.(    `.(    `.(    `.(    `.(
 
 Description : Code to call Amazon Rekognition API for Emotional analysis
-Working directory: 
-Input       : 
-
 """
 # Import relevant libraries
 import boto3
 import json
 import os
 import argparse
+import shutil
+
+from PIL import Image
+import pandas as pd
+import numpy as np
+import cv2
+import json
+import random
+import matplotlib.pyplot as plt
 
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), "./..")).replace("\\","/")
 
@@ -26,6 +32,7 @@ client = boto3.client('rekognition', region_name='us-east-1', aws_access_key_id 
 
 
 def reko(imagePath,savePath):
+    """ To do Emotional analysis of the images stored in respective folder """
     # Load image
     with open(imagePath ,'rb') as source_image:
         source_bytes = source_image.read()
@@ -40,6 +47,50 @@ def reko(imagePath,savePath):
     if not os.path.exists(savePath): os.makedirs(savePath)
     json.dump(response_face_emotion,open(savePath+tail.split(".")[0]+".json","w")) # Input file name and JSON file will be same
     print("[info...] Emotions successfully dumped")
+
+def reset():
+    """ This command will delete the older execution results from the folders and make ready this software for new run """
+    shutil.rmtree(path+"/out/")
+    print("[warning...] out folder deleted")
+    shutil.rmtree(path+"/db/input/videos/SourceDump/")
+    print("[warning...] SourceDump folder deleted")
+    shutil.rmtree(path+"/db/input/videos/OutputDump/")
+    print("[warning...] OutputDump folder deleted")
+    shutil.rmtree(path+"/db/input/artifact/")
+    print("[warning...] artifact folder deleted")
+
+    if not os.path.exists(path+"/out/"): os.makedirs(path+"/out/")
+    if not os.path.exists(path+"/db/input/videos/SourceDump/"): os.makedirs(path+"/db/input/videos/SourceDump/")
+    if not os.path.exists(path+"/db/input/videos/OutputDump/"): os.makedirs(path+"/db/input/videos/OutputDump/")
+    if not os.path.exists(path+"/db/input/artifact/"): os.makedirs(path+"/db/input/artifact/")
+
+def facedetect(photo,outputjson_emotion):
+    """ To extract face form images """
+    img0=np.array(Image.open(photo))
+    coordinates_emotions=json.load(open(outputjson_emotion,"r"))
+
+    result = img0.copy()
+    for i,value in enumerate(coordinates_emotions["FaceDetails"]):
+        BoundingBox = value["BoundingBox"]
+        df=pd.DataFrame(value["Emotions"])
+        label='%s' % (df["Type"].iloc[df['Confidence'].idxmax()])
+        tl = round(0.002 * (img0.shape[0] + img0.shape[1]) / 2) + 1  # line/font thickness
+        color = [random.randint(0, 255) for _ in range(3)]
+        tf = max(tl - 1, 1)  # font thickness
+        x1, y1, w_size, h_size= BoundingBox["Left"], BoundingBox["Top"], BoundingBox["Width"],BoundingBox["Height"]
+        x_start = round(x1*img0.shape[1])
+        y_start = round(y1*img0.shape[0])
+        x_end = round(x_start + w_size*img0.shape[1])
+        y_end = round(y_start + h_size*img0.shape[0])
+        roi=img0.copy()
+        roi = roi[y_start:y_end, x_start:x_end]
+        cv2.imwrite(path + f"/db/artifact/Person_{str(i)}.jpg",cv2.cvtColor(roi, cv2.COLOR_BGR2RGB))
+        c1,c2=(x_start, y_start), (x_end, y_end)
+        cv2.rectangle(result, c1,c2,color, thickness=tl, lineType=cv2.LINE_AA) 
+        cv2.putText(result, label, (c1[0], c1[1] - 2), 0, tl / 5, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+    cv2.imwrite(path+"/out/result1.jpg",cv2.cvtColor(result, cv2.COLOR_BGR2RGB))  
+    print("[info...] See '.db/artifact/*.jpg'  folder and rename the file as per person name") 
+
 
 if __name__=="__main__":
 

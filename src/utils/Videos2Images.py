@@ -44,10 +44,10 @@ if __name__=="__main__":
 
     parser=argparse.ArgumentParser()
     
-    parser.add_argument("--inputpath",type=str,default=path+'/db/input/videos/SourceDump/sample.mp4',help='File name of the input video')
-    parser.add_argument("--fps",type=float,default=10,help='Frame per second, Default=10 sec')
-    parser.add_argument("--imageExt",type=str,default='.jpg',help='Output file extension, Default=".jpg"')
-    parser.add_argument("--OutputName",type=str,default='frame',help='Output file name, Default="frame"')
+    parser.add_argument("-i","--inputpath",type=str,default=path+'/db/input/videos/SourceDump/sample.mp4',help='File name of the input video')
+    parser.add_argument("-f","--fps",type=float,default=10,help='Frame per second, Default=10 sec')
+    parser.add_argument("-e","--imageExt",type=str,default='.jpg',help='Output file extension, Default=".jpg"')
+    parser.add_argument("-o","--OutputName",type=str,default='frame',help='Output file name, Default="frame"')
     args=parser.parse_args()
     run(
         inputpath=args.inputpath,
