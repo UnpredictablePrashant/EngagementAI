@@ -46,6 +46,6 @@ python src/utils/Videos2Images.py
 
 *As of now user are suppose to do the selection of images need to be analyzed.*
 
-## How to setup the person details?
+## How to setup the person's details?
 In this step user is suppose to mask the face from the images. **File name should be the Name of the person**.
 
