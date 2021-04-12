@@ -37,7 +37,7 @@ python src/utils/Videos2Images.py -i C:/Users/imash/Documents/upwork/db/input/vi
 - imageExt : File extension. This archetecture supports only *.jpg format
 - OutputName : Alias of the output file name
 
-If you don't want to involve in complexity of input argument, then just insure that your video should be available at `./db/input/videos/SourceDump`. Script will dump your images at `./db/input/videos/OutputDump/frame*.jpg` with an alias of `frame` and run below command.
+If you don't want to involve in complexity of input argument, then just insure that your video should be available at `./db/input/videos/SourceDump` and run below mentioned code. Script will dump your images at `./db/input/videos/OutputDump/frame*.jpg` with an alias of `frame`.
 
 ```bash
 python src/utils/Videos2Images.py
