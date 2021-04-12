@@ -42,10 +42,47 @@ If you don't want to involve in complexity of input argument, then just insure t
 ```bash
 python src/utils/Videos2Images.py
 ```
-
-
 *As of now user are suppose to do the selection of images need to be analyzed.*
 
-## How to setup the person's details?
-In this step user is suppose to mask the face from the images. **File name should be the Name of the person**.
+## Emotional analysis
+Once user will select the images in `./db/input/videos/OutputDump/frame*.jpg`, next step will be to do emotional analysis. To do emotional analysis, We are utilizing [Amazon Rekognition](https://docs.aws.amazon.com/rekognition/latest/dg/API_Emotion.html). 
+
+To do analysis, user is suppose to run following command.
+```bash
+python app.py
+```
+This execution will create json resonse for Amazon Rekognition emotional analysis at `./out/`. Here we are storing the all the responses in *.json format inside the folder and filename of original file name.
+
+## How to setup the person details?
+In this step user is suppose to mask the face from the images. **File name should be the Name of the person**. Code will generate the Alias attached with Each name. It is user responsibility to change the file name as per Person's name.  This code will upload your masked images to AWS S3.
+
+Steps 
+- Select the image from [./db/input/videos/OutputDump/frame*.jpg](./db/input/videos/OutputDump/) which contains all the persons with proper visibility of face. From this particular image we will extract the face.
+- Run below command
+```python
+from src.engine import facedetect
+facedetect(photo,outputjson_emotion)
+```
+**Explaination**
+- photo : Location of image selected in Step 1. e.g. `./db/input/images/frame33.jpg`
+- outputjson_emotion : Amazon Rekognition Emotional analysis file of image selected in step 1. e.g. `./out/frame33.json`
+
+## Upload the images in S3
+
+--TODO--
+
+
+## Reset the software
+To reset run following python commands. Below command will delete out folder, SourceDump folder, OutputDump folder, artifact folder.
+
+```python
+from src.engine import reset
+reset()
+```
+
+
+
+
+
+
 
