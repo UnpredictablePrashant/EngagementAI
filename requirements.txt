@@ -2,3 +2,4 @@ boto3==1.17.49
 tqdm==4.48.0
 opencv_python==4.3.0.36
 Pillow==8.2.0
+sklearn==0.0
