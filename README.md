@@ -69,10 +69,16 @@ Steps
 - photo : Location of image selected in Step 1. e.g. `./db/input/images/frame33.jpg`
 - outputjson_emotion : Amazon Rekognition Emotional analysis file of image selected in step 1. e.g. `./out/frame33.json`
 
+## Create S3 bucket
+```python
+from src.engine import create_bucket
+create_bucket('rekoengagementai')
+```
+
 ## Upload the images in S3
 ```python
 from src.engine import upload_folder_to_s3
-Bucket_name="xxxx"
+Bucket_name="rekoengagementai"
 Directory_name='C:/Users/imash/Documents/upwork/db/artifact/'
 Folder_in_S3='artifact'
 s3bucket = s3.Bucket(Bucket_name)
@@ -80,7 +86,7 @@ upload_folder_to_s3(s3bucket, Directory_name, Folder_in_S3)
 ```
 ## Analysis
 
-
+[Notebook](./notebook/analysis.ipynb)
 
 ## Reset the software
 To reset run following python commands. Below command will delete out folder, SourceDump folder, OutputDump folder, artifact folder.
