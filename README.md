@@ -18,7 +18,7 @@ https://docs.anaconda.com/anaconda/install/windows/
 3. Run Anaconda prompt and change the drive to the location to this directory and run command `python -m pip install -r requirements.txt`. This will install all the packages require for model execution.
 
 ## How to convert video to images?
-*You should be present at the directory location of [README.md]('./README.md')*
+*You should be present at the directory location of [README.md](./README.md)*
 
 Code Location : [Videos2Images.py](./src/utils/Videos2Images.py)
 
