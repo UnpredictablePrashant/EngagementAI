@@ -14,8 +14,3 @@ If you are getting opencv error then please install it manually using the comman
 python3 -m pip install opencv-python
 ```
 
-## Contributors
-
-<a href="https://github.com/UnpredictablePrashant/EngagementAI/graphs/contributors">
-  <img src="https://github.com/UnpredictablePrashant/EngagementAI/" />
-</a>
