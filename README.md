@@ -51,7 +51,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 Step 5:
-Download Video from this link "https://www.youtube.com/watch?v=53yPfrqbpkE&ab_channel=WaipaDistrictCouncil" and put downloaded files at `./db/input/videos/SourceDump/`
+Download Video from this link "https://www.youtube.com/watch?v=53yPfrqbpkE&ab_channel=WaipaDistrictCouncil" and put downloaded file at `./db/input/videos/SourceDump/`
 
 Step 6:
 Run following command and follow the prompt instruction
