@@ -17,6 +17,47 @@ https://docs.anaconda.com/anaconda/install/windows/
 
 3. Run Anaconda prompt and change the drive to the location to this directory and run command `python -m pip install -r requirements.txt`. This will install all the packages require for model execution.
 
+## How to use this software?
+
+Step 1:
+```bash
+Python 3.7.3 (default, Apr 24 2019, 15:29:51) [MSC v.1915 64 bit (AMD64)] :: Anaconda, Inc. on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from src.engine import reset
+>>> reset()
+```
+Step 2:
+```bash
+Download Video from this link "https://www.youtube.com/watch?v=K4GyPYuiLWQ&t=15s&ab_channel=PatrickEagan" and rename it as `sample.mp4`
+You can use the original name. `Refer How to convert video to images?` section.
+```
+Step 3:
+```bash
+Put the video in "./db/input/videos/SourceDump/"
+```
+Step 4:
+```bash
+python src/utils/Videos2Images.py
+```
+Step 5:
+Select few images in which you want to do analysis. Images are available at ["/db/input/videos/OutputDump/](./db/input/videos/OutputDump/)
+
+Step 6:
+-   Make master images.
+-   Refer `How to setup the person details?` section.
+-   Upload master images in S3.
+-   To ensure upload is successfull. Use below command
+```python
+from src.engine import printS3items
+printS3items()
+```
+
+Step 7:
+Start analysis 
+```bash
+python app.py
+```
+
 ## How to convert video to images?
 *You should be present at the directory location of [README.md](./README.md)*
 
@@ -86,7 +127,8 @@ upload_folder_to_s3(s3bucket, Directory_name, Folder_in_S3)
 ```
 ## Analysis
 
-[Notebook](./notebook/analysis.ipynb)
+- [Notebook](./notebook/analysis.ipynb)
+- [Final Excel](./FinalAnalysisReport.xlsx)
 
 ## Reset the software
 To reset run following python commands. Below command will delete out folder, SourceDump folder, OutputDump folder, artifact folder.
@@ -95,6 +137,10 @@ To reset run following python commands. Below command will delete out folder, So
 from src.engine import reset
 reset()
 ```
+
+## Extra Code
+-   `src\utils\face_detect.py` : To find the Face. In this we are using AWS Rekogination not this.
+-   `src\utils\face_similarity.py` : To find the Coine similarity between two images.
 
 ## References
 [Input Data used for analysis](https://www.youtube.com/watch?v=K4GyPYuiLWQ&t=15s&ab_channel=PatrickEagan)
