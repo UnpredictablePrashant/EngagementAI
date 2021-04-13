@@ -54,6 +54,8 @@ if __name__=="__main__":
     if V2I==1:
         Videos2Images.run(inputpath = rootpath+'/db/input/videos/SourceDump/Finance & Corporate Committee - Zoom Meeting.mp4',fps = 100,imageExt=".jpg",OutputName=jsonFileAlias)
 ```
+**Replace Finance & Corporate Committee - Zoom Meeting.mp4** with your file name
+
 Step 5:
 Run following command and follow the prompt instruction
 ```bash
