@@ -8,7 +8,9 @@ import cv2
 import os 
 import argparse
 
-def run(inputpath,fps,imageExt,OutputName):
+path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")).replace("\\", "/") # To get current working path
+
+def run(inputpath,fps,imageExt=".jpg",OutputName="frame"):
     '''Main function to run the program'''
     inputIMG = cv2.VideoCapture(inputpath) # Read the video from specified path 
     if not os.path.exists(path+'/db/input/videos/OutputDump'): os.makedirs(path+'/db/input/videos/OutputDump') # creating a folder named data 
@@ -39,8 +41,6 @@ def run(inputpath,fps,imageExt,OutputName):
 
   
 if __name__=="__main__":
-
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")).replace("\\", "/") # To get current working path
 
     parser=argparse.ArgumentParser()
     

@@ -3,7 +3,7 @@ Engagement AI
 """
 
 # Import dependencies
-from src.engine import reko,Bucket_name,Folder_in_S3
+from src.engine import reko,Bucket_name,Folder_in_S3,upload_folder_to_s3,s3,facedetect
 import os
 import glob
 import json
@@ -13,9 +13,12 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 from tqdm import tqdm
+from random import sample
+from src.utils import Videos2Images
 
 # Get all the files in directory
 rootpath = os.path.abspath(os.path.join(os.path.dirname(__file__), "./")).replace("\\", "/")
+ImageCollection= rootpath + '/db/input/videos/OutputDump/'
 directory = rootpath+ "/db/input/videos/OutputDump/*.jpg"
 outputpath = rootpath+"/out/"
 Bucket_name=Bucket_name # Bucket name in AWS S3
@@ -122,7 +125,7 @@ def EngagementAnalysisBatch(threshold):
         _,filename = os.path.split(filedir)
         EngagementAnalysis(filedir,outputjson_emotion_dir_root+filename.split(".jpg")[0]+"/"+jsonFileAlias+".json",k,threshold)
 
-    print(f"[info...] Congratualtions Analysis all the analysis completed")
+    print(f"[info...] Congratulations Analysis all the analysis completed")
 
 def dfs_tabs(df_list, sheet_list, file_name):
     """ To combine multiple excel into one """
@@ -136,8 +139,10 @@ def ExcelCombine():
     files = dirFile(rootpath+'/out/excel','.xlsx')
     for file in tqdm(files):
         df = df.append(pd.read_excel(file),ignore_index=True)
-
+    
+    df = df[df["Person"]!="XXXXX"]
     df1 = pd.DataFrame(df.groupby(['Person','Image Link'])['AI Engagement Score'].mean()).reset_index(drop=False)
+    df1 = df1[df1["Person"]!="XXXXX"]
     # list of dataframes and sheet names
     dfs = [df, df1]
     sheets = ['raw data combined','AI Engagement Score','df2']  
@@ -148,8 +153,59 @@ def ExcelCombine():
     print(f"[info...] All analysis Excel combined for analyis")
 
 if __name__=="__main__":
-    print(f"[info...] Emotional Analysis initiated")
-    EmotionalAnalysis() # Uses Amazon Rekogination
-    print(f"[info...] Analysis of images initiated")
-    EngagementAnalysisBatch(threshold=0.8) # Individual analysis generation
-    ExcelCombine() # Combine the individual Spreadsheet
+
+    V2I=int(input("\nDo you want to convert video to image?[Press 1 for Yes and 0 for No or you alread have in OutputDump folder]:"))
+
+    if V2I==1:
+        Videos2Images.run(inputpath = rootpath+'/db/input/videos/SourceDump/Finance & Corporate Committee - Zoom Meeting.mp4',fps = 100,imageExt=".jpg",OutputName=jsonFileAlias)
+
+        selection=int(input("\nDo you want to automatically select the images? [Press 1 for Yes and 0 for No]:"))
+        try:
+            if selection==1:
+                retainNo= int(input("\nHow many images do you want to retain?[Type number e.g. 10]:"))
+                files = os.listdir(ImageCollection)
+                for file in sample(files,len(files)-retainNo):
+                    os.remove(ImageCollection+file)
+            else:
+                print(f"\nPlease delete the images at {ImageCollection} manually which you not want to analyze:")
+        except:
+            print(f"\nPlease delete the images at {ImageCollection} which you not want to analyze:")
+
+    else:
+        print("Proceeding to next step...")
+
+
+
+    uploadIn=int(input("\nDo you want to automatically create master images? [Press 1 for Yes and 0 for No]:"))
+
+    if uploadIn==1:
+
+        permission = int(input(f"Please confirm you have transfered one representable file from {ImageCollection} to {rootpath}/db/masterImg/ manually ! [Press 1 for Yes and 0 for No]" ))
+        
+        try:
+
+            reko(dirFile(rootpath+"/db/masterImg/",".jpg")[0],rootpath+"/db/masterImg/")
+            facedetect(dirFile(rootpath+"/db/masterImg/",".jpg")[0],dirFile(rootpath+"/db/masterImg/",".json")[0])
+            upload_folder_to_s3(s3.Bucket(Bucket_name), rootpath+'/db/artifact/',Folder_in_S3) 
+
+        except:
+            print(f"Error Occured !! it may be due to slow internet or you have not transfered the file from {ImageCollection} to {rootpath}/db/masterImg/ manually") 
+    else:
+        print("Manually upload the master face image in S3 refer README.md")
+
+    entry = int(input("\nDo you want to proceed for Emotional analysis using AWS? [Type 1 for yes and 0 for No]"))
+    
+    if entry==1:
+        print(f"[info...] Emotional Analysis initiated")
+        EmotionalAnalysis() # Uses Amazon Rekogination
+    else:
+        print("Proceeding to next step...")
+
+    entry2 = int(input("\nDo you want to proceed for Engagement analysis ? [Type 1 for yes and 0 for No]"))
+
+    if entry2==1:
+        print(f"[info...] Analysis of images initiated")
+        EngagementAnalysisBatch(threshold=0.8) # Individual analysis generation
+        ExcelCombine() # Combine the individual Spreadsheet
+    else:
+        print("\nThank you for using this app")

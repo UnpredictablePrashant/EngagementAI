@@ -26,12 +26,12 @@ path = os.path.abspath(os.path.join(os.path.dirname(__file__), "./..")).replace(
 credentials=json.load(open(path + '/config/credentials.json','rb'))
 access_key_id = credentials["Access key ID"]
 secret_access_key = credentials["Secret access key"]
-Bucket_name="rekoengagementai" # Bucket name in AWS S3
-Folder_in_S3='artifact' # Folder name inside S3 bucket
+Bucket_name=credentials["Bucket_name"] # Bucket name in AWS S3
+Folder_in_S3=credentials["Folder_in_S3"] # Folder name inside S3 bucket
 
 # Activate web services
 client = boto3.client('rekognition', region_name='us-east-1', aws_access_key_id = access_key_id, aws_secret_access_key= secret_access_key)
-s3 = boto3.client('s3')
+# s3 = boto3.client('s3')
 s3 = boto3.resource(
     service_name='s3',
     region_name='us-east-1',
@@ -51,7 +51,7 @@ def upload_folder_to_s3(s3bucket, inputDir, s3Path):
     os.system("ls -ltR " + inputDir)
     print("Dest  S3path:",s3Path)
     try:
-        for path, subdirs, files in os.walk(inputDir):
+        for path, _, files in os.walk(inputDir):
             for file in files:
                 dest_path = path.replace(inputDir,"")
                 __s3file = os.path.normpath('/' + dest_path + '/' + file).replace("\\","/")
@@ -68,9 +68,18 @@ def printS3items():
     """ To print the list of the items present in S3 """ 
     session = Session(aws_access_key_id=access_key_id,
                         aws_secret_access_key=secret_access_key)
-    your_bucket = session.resource('s3').Bucket('rekoengagementai')
+    your_bucket = session.resource('s3').Bucket(Bucket_name)
     for s3_file in your_bucket.objects.all():
         print(s3_file.key)
+
+def deleteS3items():
+    """ To print the list of the items present in S3 """ 
+    session = Session(aws_access_key_id=access_key_id,
+                        aws_secret_access_key=secret_access_key)
+    your_bucket = session.resource('s3').Bucket(Bucket_name)
+    for s3_file in your_bucket.objects.all():
+        s3.Object(Bucket_name, s3_file.key).delete()
+        print(f"{s3_file.key} deleted")
 
 def reko(imagePath,savePath):
     """ To do Emotional analysis of the images stored in respective folder """
@@ -112,10 +121,17 @@ def reset():
     except:
         pass
 
+    try:
+        shutil.rmtree(path+"/db/masterImg/")
+        print("[warning...] masterImg's files deleted")
+    except:
+        pass
+
     if not os.path.exists(path+"/out/"): os.makedirs(path+"/out/")
     if not os.path.exists(path+"/db/input/videos/SourceDump/"): os.makedirs(path+"/db/input/videos/SourceDump/")
     if not os.path.exists(path+"/db/input/videos/OutputDump/"): os.makedirs(path+"/db/input/videos/OutputDump/")
     if not os.path.exists(path+"/db/artifact/"): os.makedirs(path+"/db/artifact/")
+    if not os.path.exists(path+"/db/masterImg/"): os.makedirs(path+"/db/masterImg/")
 
 def facedetect(photo,outputjson_emotion):
     """ To extract face form images """
