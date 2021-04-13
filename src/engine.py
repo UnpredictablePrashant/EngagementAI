@@ -12,7 +12,6 @@ import json
 import os
 import argparse
 import shutil
-
 from PIL import Image
 import pandas as pd
 import numpy as np
