@@ -95,6 +95,7 @@ def EngagementAnalysis(photo,outputjson_emotion,k,threshold=0.80):
 
         data.append(output)
 
+
     Result= pd.DataFrame(data)
     Result["AI Engagement Score"] = Result.apply(algo,axis=1)
     Result["AI raw data"] = str(coordinates_emotions)
