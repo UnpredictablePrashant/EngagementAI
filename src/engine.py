@@ -7,6 +7,7 @@ Description : Code to call Amazon Rekognition API for Emotional analysis
 """
 # Import relevant libraries
 import boto3
+from boto3.session import Session
 import json
 import os
 import argparse
@@ -25,6 +26,8 @@ path = os.path.abspath(os.path.join(os.path.dirname(__file__), "./..")).replace(
 credentials=json.load(open(path + '/config/credentials.json','rb'))
 access_key_id = credentials["Access key ID"]
 secret_access_key = credentials["Secret access key"]
+Bucket_name="rekoengagementai" # Bucket name in AWS S3
+Folder_in_S3='artifact' # Folder name inside S3 bucket
 
 # Activate web services
 client = boto3.client('rekognition', region_name='us-east-1', aws_access_key_id = access_key_id, aws_secret_access_key= secret_access_key)
@@ -35,6 +38,7 @@ s3 = boto3.resource(
     aws_access_key_id=access_key_id,
     aws_secret_access_key=secret_access_key
     )
+
 
 def create_bucket(name):
     """ To create Amazon S3 bucket """
@@ -58,7 +62,15 @@ def upload_folder_to_s3(s3bucket, inputDir, s3Path):
     except Exception as e:
         print(" ... Failed!! Quitting Upload!!")
         print(e)
-        raise e     
+        raise e    
+
+def printS3items():
+    """ To print the list of the items present in S3 """ 
+    session = Session(aws_access_key_id=access_key_id,
+                        aws_secret_access_key=secret_access_key)
+    your_bucket = session.resource('s3').Bucket('rekoengagementai')
+    for s3_file in your_bucket.objects.all():
+        print(s3_file.key)
 
 def reko(imagePath,savePath):
     """ To do Emotional analysis of the images stored in respective folder """
@@ -74,24 +86,36 @@ def reko(imagePath,savePath):
 
     # Save response
     if not os.path.exists(savePath): os.makedirs(savePath)
-    json.dump(response_face_emotion,open(savePath+tail.split(".")[0]+".json","w")) # Input file name and JSON file will be same
+    json.dump(response_face_emotion,open(savePath+tail.split("_")[0]+".json","w")) # Input file name and JSON file will be same
     print("[info...] Emotions successfully dumped")
 
 def reset():
     """ This command will delete the older execution results from the folders and make ready this software for new run """
-    shutil.rmtree(path+"/out/")
-    print("[warning...] out folder deleted")
-    shutil.rmtree(path+"/db/input/videos/SourceDump/")
-    print("[warning...] SourceDump folder deleted")
-    shutil.rmtree(path+"/db/input/videos/OutputDump/")
-    print("[warning...] OutputDump folder deleted")
-    shutil.rmtree(path+"/db/input/artifact/")
-    print("[warning...] artifact folder deleted")
+    try:
+        shutil.rmtree(path+"/out/")
+        print("[warning...] out folder deleted")
+    except:
+        pass
+    try:
+        shutil.rmtree(path+"/db/input/videos/SourceDump/")
+        print("[warning...] SourceDump folder deleted")
+    except:
+        pass
+    try:
+        shutil.rmtree(path+"/db/input/videos/OutputDump/")
+        print("[warning...] OutputDump folder deleted")
+    except:
+        pass
+    try:
+        shutil.rmtree(path+"/db/artifact/")
+        print("[warning...] artifact folder deleted")
+    except:
+        pass
 
     if not os.path.exists(path+"/out/"): os.makedirs(path+"/out/")
     if not os.path.exists(path+"/db/input/videos/SourceDump/"): os.makedirs(path+"/db/input/videos/SourceDump/")
     if not os.path.exists(path+"/db/input/videos/OutputDump/"): os.makedirs(path+"/db/input/videos/OutputDump/")
-    if not os.path.exists(path+"/db/input/artifact/"): os.makedirs(path+"/db/input/artifact/")
+    if not os.path.exists(path+"/db/artifact/"): os.makedirs(path+"/db/artifact/")
 
 def facedetect(photo,outputjson_emotion):
     """ To extract face form images """
