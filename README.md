@@ -17,7 +17,7 @@ conda activate engagementai
 ```
 
 ```bash
-git clone https://github.com/ashishkrb7/EngagementAI.git
+git clone https://github.com/UnpredictablePrashant/EngagementAI.git
 ```
 ```bash
 cd EngagementAI
