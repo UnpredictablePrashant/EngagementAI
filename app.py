@@ -18,7 +18,6 @@ from src.utils import Videos2Images
 from datetime import datetime
 
 now = str(datetime.now())
- 
 
 # Get all the files in directory
 rootpath = os.path.abspath(os.path.join(os.path.dirname(__file__), "./")).replace("\\", "/")
@@ -32,9 +31,6 @@ jsonFileAlias="frame"
 
 Marks=pd.read_csv(rootpath + "/db/input/docs/Marks.csv")
 QnA=pd.read_csv(rootpath + "/db/input/docs/QnA.csv")
-
-ArtifactFiles = glob.glob(rootpath+ "/db/artifact/Person_*.jpg") # get all the file name with directory ends with *.jpg
-PersonName = list(map(lambda x: os.path.split(x)[1].split(".")[0],ArtifactFiles)) # To get the name of the persons
 
 def EmotionalAnalysis():
     """ Tp do the emotional analysis of the selected images """
@@ -130,7 +126,7 @@ def EngagementAnalysisBatch(threshold):
         _,filename = os.path.split(filedir)
         EngagementAnalysis(filedir,outputjson_emotion_dir_root+filename.split(".jpg")[0]+"/"+jsonFileAlias+".json",k,threshold)
 
-    print(f"[info...] Congratulations Analysis all the analysis completed")
+    print(f"[info...] Congratulations all the analysis completed")
 
 def dfs_tabs(df_list, sheet_list, file_name):
     """ To combine multiple excel into one """
@@ -162,7 +158,8 @@ if __name__=="__main__":
     V2I=int(input("\nDo you want to convert video to image?[Press 1 for Yes and 0 for No or you alread have in OutputDump folder]:"))
 
     if V2I==1:
-        Videos2Images.run(inputpath = rootpath+'/db/input/videos/SourceDump/Finance & Corporate Committee - Zoom Meeting.mp4',fps = 100,imageExt=".jpg",OutputName=jsonFileAlias)
+        filename=input("\nEnter video file name [e.g. Finance & Corporate Committee - Zoom Meeting.mp4 ]:")
+        Videos2Images.run(inputpath = rootpath+f'/db/input/videos/SourceDump/{filename}',fps = 100,imageExt=".jpg",OutputName=jsonFileAlias)
 
         selection=int(input("\nDo you want to automatically select the images? [Press 1 for Yes and 0 for No]:"))
         try:
