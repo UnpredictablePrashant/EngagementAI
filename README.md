@@ -60,3 +60,5 @@ Run following command and follow the prompt instruction
 ```bash
 python app.py
 ```
+## Author
+Ashish Kumar
