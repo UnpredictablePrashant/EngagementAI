@@ -159,7 +159,7 @@ if __name__=="__main__":
 
     if V2I==1:
         filename=input("\nEnter video file name [e.g. Finance & Corporate Committee - Zoom Meeting.mp4 ]:")
-        Videos2Images.run(inputpath = rootpath+f'/db/input/videos/SourceDump/{filename}',fps = 100,imageExt=".jpg",OutputName=jsonFileAlias)
+        Videos2Images.run(inputpath = rootpath+f'/db/input/videos/SourceDump/{filename}',fps = 5,imageExt=".jpg",OutputName=jsonFileAlias)
 
         selection=int(input("\nDo you want to automatically select the images? [Press 1 for Yes and 0 for No]:"))
         try:
